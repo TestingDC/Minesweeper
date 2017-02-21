@@ -10,89 +10,43 @@ import org.lwjgl.opengl.PixelFormat;
 import Listen.KeyboardListener;
 import Listen.MouseListener;
 import Tools.DebugMenu;
-import World.Level;
 import World.TileImport;
 
 public class Minesweeper {
 
+	public enum GameState { MAINMENU, GAMEMENU, GAMEOPTIONS, GAME, PAUSE_STATE }
+	public GameState gameState = GameState.MAINMENU;
+	
 	public int DisplayWidth = 500, DisplayHeight = 500;
-	public static int TileWidth = 20, TileHeight = 20;
-	public static int TileSize = 16;
-	
-	public static int BoardOffsetX = 4, BoardOffsetY = 36;
-	
-	public static boolean done = false;
-	
-	public static TileImport tiles;
-	public static Level newLevel;
 	
 	public static void main(String Args[]) {
-		new Minesweeper(); // Create a Instance of Minesweeper.
+		new Minesweeper();
 	}
 	
-	// Constructor - Loads things whenever new object instance is created.
 	public Minesweeper() {
-		createWindow(); // Create Window
-		tiles = new TileImport(); // Load TileSets into Memory
-		gameLoop(); // Start GameLoop
+		createWindow();
+		TileImport.Import();
+		gameLoop();
 	}
 	
 	public void gameLoop() {
-
-		newLevel = new Level();
-		newLevel.generateBombs(75);
+		Game game = new Game(1);
 		
 		while(!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
-			
-			// Game Logic + Click Logic
-			if(!done) {
-				if(MouseListener.clicked) {
-					MouseListener.clicked = false;
-					newLevel.updateBoard((int) Math.floor(MouseListener.MouseX / TileSize), (int) Math.floor(MouseListener.MouseY / TileSize));
-					newLevel.checkWin();
-				}
-				if(MouseListener.rightClicked) {
-					MouseListener.rightClicked = false;
-					int tempX = (int) Math.floor(MouseListener.MouseX / TileSize);
-					int tempY = (int) Math.floor(MouseListener.MouseY / TileSize);
-					newLevel.markTile(tempX, tempY);
-				}
-			}
-			// Done Updating Board
-			
+
 			MouseListener.tick();
 			KeyboardListener.tick();
-			newLevel.render();
+			game.update();
+			game.render();
+	
 			if(DebugMenu.debug) {
 				DebugMenu.render();
 			}
-			renderFrame();
 			
 			Display.update();
 			Display.sync(60);
 		}
-	}
-	
-	// Renders a Nice Frame around Minesweeper
-	public void renderFrame() {
-		int frameOffsetX = 0;
-		int frameOffsetY = 32;
-		int frameThickness = 4;
-		int frameWidth = frameThickness * ((TileWidth * TileSize) / frameThickness);
-		int frameHeight = frameThickness * ((TileHeight * TileSize) / frameThickness);
-		
-		// Draw Edges
-		tiles.frameSet.get(0).draw(frameOffsetX, frameThickness + frameOffsetY, frameThickness, frameHeight);
-		tiles.frameSet.get(0).draw(frameWidth+frameThickness+frameOffsetX, frameThickness + frameOffsetY, frameThickness, frameHeight);
-		tiles.frameSet.get(0).draw(frameOffsetX, frameOffsetY, frameWidth+frameThickness, frameThickness);
-		tiles.frameSet.get(0).draw(frameOffsetX, frameHeight+frameThickness+frameOffsetY, frameWidth+frameThickness, frameThickness);
-		
-		// Draw Corners
-		tiles.frameSet.get(1).draw(frameOffsetX, frameOffsetY, frameThickness, frameThickness);
-		tiles.frameSet.get(2).draw(frameOffsetX, frameHeight+frameThickness+frameOffsetY, frameThickness, frameThickness);
-		tiles.frameSet.get(3).draw(frameWidth+frameThickness+frameOffsetX, frameOffsetY, frameThickness, frameThickness);
-		tiles.frameSet.get(4).draw(frameWidth+frameThickness+frameOffsetX, frameHeight+frameThickness+frameOffsetY, frameThickness, frameThickness);
 	}
 	
 	// Creates window

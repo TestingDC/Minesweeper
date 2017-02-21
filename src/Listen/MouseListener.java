@@ -3,7 +3,7 @@ package Listen;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-import Core.Minesweeper;
+import Core.Game;
 
 public class MouseListener {
 	
@@ -14,8 +14,8 @@ public class MouseListener {
 	public static boolean rightClicked;
 	
 	public static void tick() {
-		MouseX = Mouse.getX() - Minesweeper.BoardOffsetX;
-		MouseY = Math.abs(Mouse.getY() - Display.getHeight()) - Minesweeper.BoardOffsetY;
+		MouseX = Mouse.getX() - Game.boardOffsetX;
+		MouseY = Math.abs(Mouse.getY() - Display.getHeight()) - Game.boardOffsetY;
 		while(Mouse.next()) {
 			if(Mouse.getEventButton() == 0) {
 				if(!Mouse.getEventButtonState()) {

@@ -5,13 +5,13 @@ import org.newdawn.slick.Image;
 
 public class TileImport {
 
-	public Image TileSet = null;
-	public Image FrameSet = null;
+	public static Image TileSet = null;
+	public static Image FrameSet = null;
 	
-	public HashMap<Integer, Image> tileSet = new HashMap<Integer, Image>();
-	public HashMap<Integer, Image> frameSet = new HashMap<Integer, Image>();
+	public static HashMap<Integer, Image> tileSet = new HashMap<Integer, Image>();
+	public static HashMap<Integer, Image> frameSet = new HashMap<Integer, Image>();
 	
-	public TileImport() {
+	public static void Import() {
 		try {
 			TileSet = new Image("src/Resources/tileset.png");
 			FrameSet = new Image("src/Resources/outline.png");
@@ -36,6 +36,7 @@ public class TileImport {
 			tileSet.put(98, TileSet.getSubImage(3 * 16, 1 * 16, 16, 16)); // Bomb (Crossed-Out) Tile
 			tileSet.put(97, TileSet.getSubImage(0 * 16, 1 * 16, 16, 16)); // Marked Flag Tile
 			tileSet.put(96, TileSet.getSubImage(1 * 16, 1 * 16, 16, 16)); // Question Mark Tile
+			tileSet.put(95, TileSet.getSubImage(10 * 16, 1 * 16, 16, 16)); // Star Tile
 			
 			// Outline Frameset
 			frameSet.put(0, FrameSet.getSubImage(0 * 4, 0 * 4, 4, 4));

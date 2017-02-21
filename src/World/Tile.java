@@ -1,6 +1,6 @@
 package World;
 
-import Core.Minesweeper;
+import Core.Game;
 
 public class Tile {
 
@@ -17,6 +17,6 @@ public class Tile {
 	
 	public void render(int x, int y) {
 		// Color color = new Color(255,255,255);
-		Minesweeper.tiles.tileSet.get(Number).draw(x * Minesweeper.TileSize + Minesweeper.BoardOffsetX, y * Minesweeper.TileSize + Minesweeper.BoardOffsetY, Minesweeper.TileSize, Minesweeper.TileSize);
+		TileImport.tileSet.get(Number).draw(x * Game.TileSize + Game.boardOffsetX, y * Game.TileSize + Game.boardOffsetY, Game.TileSize, Game.TileSize);
 	}
 }
