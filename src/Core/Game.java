@@ -1,21 +1,46 @@
 package Core;
 
+import org.lwjgl.opengl.Display;
+
 import Listen.MouseListener;
 import Menu.Button;
 import World.Level;
+import World.Tile;
 import World.TileImport;
 
 public class Game {
 
+	public int width, height = 0;
 	public static int TileSize = 16; // 16
+	public static int frameThickness = 8; // 8
 	public static int boardOffsetX = 8, boardOffsetY = 46; // 4 , 36
-	public static Level level = new Level(20, 20);
+	public Level level;
 	public static Button button;
 	
 	public static boolean gameOver = false;
 	
-	public Game(int numberOfBombs) {
-		level.generateBombs(numberOfBombs);
+	public enum GameMode { NORMAL, MYSTERY, ARCADE, TIMEATTACK}
+	public GameMode gameMode = GameMode.NORMAL;
+	
+	public Game(int width, int height, int numberOfBombs, GameMode mode) {
+		this.width = width;
+		this.height = height;
+		this.gameMode = mode;
+		this.level = new Level(width, height);
+		level.generateGame(numberOfBombs, mode);
+		
+		if((width * TileSize + frameThickness * 2) > Display.getWidth() || (height * TileSize + frameThickness * 2) > Display.getHeight()) {
+			System.out.println("ERROR: Board width or height is larger than Display Size.");
+			System.out.println("TileMap (In Tiles): " + width + "x" + height + " (In Pixels): " + width * TileSize + "x" + height * TileSize);
+			System.out.println("DisplaySize (In Pixels): " + Display.getWidth() + "x" + Display.getHeight());
+			System.out.println("FrameThickness (In Pixels): " + frameThickness + " TileSize (In Pixels): " + TileSize);
+			System.exit(0);
+			return;
+		}
+		
+		// Calculate Board Offset.
+		boardOffsetX = (Display.getWidth()/2) - ((width * TileSize) / 2) - 2;
+		boardOffsetY = (Display.getHeight()/2) - ((height * TileSize) / 2);
 	}
 	
 	public void update() {
@@ -24,17 +49,16 @@ public class Game {
 		int frameThickness = 8; // 8
 		int frameOffsetY = Game.boardOffsetY - frameThickness;
 		int frameWidth = (frameThickness * 2) + (level.level.length * TileSize);
-		button = new Button((frameWidth/2), frameOffsetY - 12, 24, 24, TileImport.tileSet.get(95));
+		button = new Button((frameWidth/2)  + (Game.boardOffsetX - frameThickness), frameOffsetY - 12, 24, 24, TileImport.tileSet.get(95));
 		
 		if(!gameOver) {
 			if(MouseListener.clicked) {
 				MouseListener.clicked = false;
-				level.updateBoard((int) Math.floor(MouseListener.MouseX / TileSize), (int) Math.floor(MouseListener.MouseY / TileSize));
-				level.checkWin();
+				level.clickBoard((int) Math.floor(MouseListener.MouseX / TileSize), (int) Math.floor(MouseListener.MouseY / TileSize));
 				
 				if(button.wasClicked()) {
 					int temp = level.TotalBombs;
-					level = new Level(20,20);
+					level = new Level(width,height);
 					level.generateBombs(temp);
 				}
 			}
@@ -54,7 +78,6 @@ public class Game {
 	}
 	
 	public void renderFrame() {
-		int frameThickness = 8; // 8
 		int frameOffsetX = Game.boardOffsetX - frameThickness;
 		int frameOffsetY = Game.boardOffsetY - frameThickness;
 		int frameWidth = frameThickness * ((level.level.length * TileSize) / frameThickness);
@@ -74,5 +97,15 @@ public class Game {
 		
 		//Top Bar
 		
+	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+	public int getHeight() {
+		return this.height;
+	}
+	public Tile getTile(int x, int y) {
+		return level.level[x][y];
 	}
 }

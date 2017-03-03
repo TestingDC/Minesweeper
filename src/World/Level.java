@@ -2,13 +2,17 @@ package World;
 
 import java.util.Random;
 
+import Core.Game.GameMode;
+
 public class Level {
 
 	public Tile[][] level;
 	public int TotalBombs = 0;
 	private static boolean done = false;
+	private static GameMode mode;
 	
 	public Level(int width, int height) {
+		setGameMode(GameMode.NORMAL);
 		level = new Tile[width][height];
 		for(int x = 0; x < level.length; x++) {
 			for(int y = 0; y < level[0].length; y++) {
@@ -46,12 +50,14 @@ public class Level {
 		return false;
 	}
 	
-	public void updateBoard(int cx, int cy) {
+	public void clickBoard(int cx, int cy) {
 		if(cx >= level.length || cx < 0 || cy >= level[0].length || cy < 0) {
 			return;
 		}
 		
-		// Click Logic
+		updateBoard();
+		
+		// Click Logic // You lose.
 		if(level[cx][cy].Bomb == true && level[cx][cy].Marked == false) {
 			for(int x = 0; x < level.length; x++) {
 				for(int y = 0; y < level[0].length; y++) {
@@ -66,6 +72,10 @@ public class Level {
 			level[cx][cy].Number = 99;
 			done = true;
 			return;
+		}
+		// Clicked Powerup
+		if(level[cx][cy].Question == true) {
+			clickedMystery(cx, cy);
 		}
 		rescursiveCheck(cx, cy);
 	}
@@ -91,7 +101,97 @@ public class Level {
 			} else {
 				level[x][y].Number = getNearbyBombs(x, y);
 				level[x][y].Checked = true;
+				if(mode == GameMode.ARCADE) {
+					randomQuestion(x, y);
+				}
 			}
+		}
+	}
+	
+	public void updateBoard() {
+		// 94 93 92 91 90
+		// Re-pop tiles that are unchecked.
+		for(int x = 0; x < level.length; x++) {
+			for(int y = 0; y < level[0].length; y++) {
+				if(level[x][y].Checked == false && level[x][y].Marked == false && level[x][y].Question == false) {
+					level[x][y].Number = -1;
+				}
+			}
+		}
+		
+		checkWin();
+	}
+	
+	public void randomQuestion(int x, int y) {
+		double rnInt = Math.random();
+		if(rnInt < 0.1) { // 1%
+			level[x][y].Number = 96;
+			level[x][y].Question = true;
+			level[x][y].Checked = false;
+		} else { // 99%
+			
+		}
+	}
+	
+	public void clickedMystery(int x, int y) {
+		level[x][y].Question = false;
+		level[x][y].Checked = true;
+		Random rand = new Random();
+		int power = rand.nextInt((5 - 1) + 1);
+		
+		switch(power) {
+		case 0:
+			level[x][y].Number = 94; // Bullseye // reveal 8 random tiles across the board.			
+			for(int i = 0; i < 8; i++) {
+				int xr = rand.nextInt((level.length - 1) + 1);
+				int yr = rand.nextInt((level[0].length - 1) + 1);
+				if(level[xr][yr].Bomb) {
+					markTile(xr, yr);
+					level[xr][yr].Checked = true;
+				} else {
+					rescursiveCheck(xr, yr);
+				}
+			}
+			break;
+		case 1:
+			level[x][y].Number = 93; // Sonar // Flickers Bombs for 2 seconds
+			break;
+		case 2:
+			level[x][y].Number = 92; // Roulette // ---
+			break;
+		case 3:
+			level[x][y].Number = 91; // BombSpread // Spreads 6 Bombs across entire board
+			break;
+		case 4:
+			level[x][y].Number = 90; // Amnesia //
+			for(int i = 0; i < 5; i++) {
+				int curX = x;
+				int curY = y;
+				for(int s = 0; s < 50; s++) {
+					if(Math.random() < 0.5) {
+						curX += (-1) + rand.nextInt((1 - (-1)) + 1);
+					} else {
+						curY += (-1) + rand.nextInt((1 - (-1)) + 1);
+					}
+					if(curX < 0) {
+						curX = 0;
+					}
+					if(curY < 0) {
+						curY = 0;
+					}
+					if(curX > level.length - 1) {
+						curX = level.length - 1;
+					}
+					if(curY > level[0].length - 1) {
+						curY = level[0].length - 1;
+					}
+					level[curX][curY].Checked = false;
+					updateBoard();
+					level[x][y].Number = 90;
+					level[x][y].Checked = true;
+				}
+			}
+			break;
 		}
 	}
 	
@@ -157,12 +257,39 @@ public class Level {
 		}
 	}
 	
+	public void generateGame(int numberOfBombs, GameMode mode) {
+		switch(mode) {
+		case NORMAL:
+			generateBombs(numberOfBombs);
+			setGameMode(GameMode.NORMAL);
+			break;
+		case MYSTERY:
+			break;
+		case ARCADE:
+			generateBombs(numberOfBombs);
+			setGameMode(GameMode.ARCADE);
+			break;
+		case TIMEATTACK:
+			break;
+		default:
+			break;
+		}
+	}
+	
 	// Mark Tile & Question Tile & Bomb Tile is toggable. Switches between marked and unmarked when called. --# Getters and Setters #--
 	// Sets the "ID" of a Tile, 0 = Blank Tile
 	public boolean getGameOver() {
 		return done;
 	}
 	
+	public static GameMode getGameMode() {
+		return mode;
+	}
+
+	public static void setGameMode(GameMode mode) {
+		Level.mode = mode;
+	}
+
 	public void setTileNumber(int Number, int x, int y) {
 		level[x][y].Number = Number;
 	}

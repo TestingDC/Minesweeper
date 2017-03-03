@@ -1,5 +1,7 @@
 package World;
 
+import org.newdawn.slick.Color;
+
 import Core.Game;
 
 public class Tile {
@@ -16,7 +18,7 @@ public class Tile {
 	}
 	
 	public void render(int x, int y) {
-		// Color color = new Color(255,255,255);
-		TileImport.tileSet.get(Number).draw(x * Game.TileSize + Game.boardOffsetX, y * Game.TileSize + Game.boardOffsetY, Game.TileSize, Game.TileSize);
+		Color color = new Color(255,255,255);
+		TileImport.tileSet.get(Number).draw(x * Game.TileSize + Game.boardOffsetX, y * Game.TileSize + Game.boardOffsetY, Game.TileSize, Game.TileSize, color);
 	}
 }

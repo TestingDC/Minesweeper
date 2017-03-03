@@ -37,6 +37,11 @@ public class TileImport {
 			tileSet.put(97, TileSet.getSubImage(0 * 16, 1 * 16, 16, 16)); // Marked Flag Tile
 			tileSet.put(96, TileSet.getSubImage(1 * 16, 1 * 16, 16, 16)); // Question Mark Tile
 			tileSet.put(95, TileSet.getSubImage(10 * 16, 1 * 16, 16, 16)); // Star Tile
+			tileSet.put(94, TileSet.getSubImage(4 * 16, 1 * 16, 16, 16)); // BullsEye Tile
+			tileSet.put(93, TileSet.getSubImage(5 * 16, 1 * 16, 16, 16)); // Sonar Tile
+			tileSet.put(92, TileSet.getSubImage(6 * 16, 1 * 16, 16, 16)); // Roulette Tile
+			tileSet.put(91, TileSet.getSubImage(7 * 16, 1 * 16, 16, 16)); // BombSpread Tile
+			tileSet.put(90, TileSet.getSubImage(8 * 16, 1 * 16, 16, 16)); // Amnesia Tile
 			
 			// Outline Frameset
 			frameSet.put(0, FrameSet.getSubImage(0 * 4, 0 * 4, 4, 4));

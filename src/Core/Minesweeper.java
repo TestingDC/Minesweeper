@@ -7,6 +7,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
+import Core.Game.GameMode;
 import Listen.KeyboardListener;
 import Listen.MouseListener;
 import Tools.DebugMenu;
@@ -19,6 +20,8 @@ public class Minesweeper {
 	
 	public int DisplayWidth = 500, DisplayHeight = 500;
 	
+	public static Game game;
+	
 	public static void main(String Args[]) {
 		new Minesweeper();
 	}
@@ -30,7 +33,7 @@ public class Minesweeper {
 	}
 	
 	public void gameLoop() {
-		Game game = new Game(1);
+		game = new Game(10, 10, 10, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
 		
 		while(!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);

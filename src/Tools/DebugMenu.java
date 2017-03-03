@@ -7,6 +7,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
 import Core.Game;
+import Core.Minesweeper;
 import World.TileImport;
 
 public class DebugMenu {
@@ -20,10 +21,13 @@ public class DebugMenu {
 	static TrueTypeFont trueTypeFont = new TrueTypeFont(font, true);
 	
 	public static void render() {
+		int width = Minesweeper.game.getWidth();
+		int height = Minesweeper.game.getHeight();
+		
 		if(toggleXray) {
-			for(int x = 0; x < Game.level.level.length; x++) {
-				for(int y = 0; y < Game.level.level[0].length; y++) {
-					if(Game.level.level[x][y].Bomb) {
+			for(int x = 0; x < width; x++) {
+				for(int y = 0; y < height; y++) {
+					if(Minesweeper.game.getTile(x, y).Bomb) {
 						TileImport.tileSet.get(99).draw(x * Game.TileSize + Game.boardOffsetX, y * Game.TileSize + Game.boardOffsetY, Game.TileSize, Game.TileSize);
 					}
 				}
@@ -38,7 +42,7 @@ public class DebugMenu {
 		}
 		
 		trueTypeFont.drawString(0, 0, "Display: " + Display.getWidth() + " x " + Display.getHeight(), Color.red);
-		trueTypeFont.drawString(0, 14, "Board: " + Game.level.level.length + " x " + Game.level.level[0].length + " Offset: " + Game.boardOffsetX + " x " + Game.boardOffsetY, Color.red);
+		trueTypeFont.drawString(0, 14, "Board: " + width + " x " + height + " Offset: " + Game.boardOffsetX + " x " + Game.boardOffsetY, Color.red);
 		trueTypeFont.drawString(0, 28, "Xray: ", Color.red);
 	}
 	
