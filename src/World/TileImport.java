@@ -7,14 +7,17 @@ public class TileImport {
 
 	public static Image TileSet = null;
 	public static Image FrameSet = null;
+	public static Image ButtonSet = null;
 	
 	public static HashMap<Integer, Image> tileSet = new HashMap<Integer, Image>();
 	public static HashMap<Integer, Image> frameSet = new HashMap<Integer, Image>();
+	public static HashMap<Integer, Image> buttonSet = new HashMap<Integer, Image>();
 	
 	public static void Import() {
 		try {
 			TileSet = new Image("src/Resources/tileset.png");
 			FrameSet = new Image("src/Resources/outline.png");
+			ButtonSet = new Image("src/Resources/Button1.png");
 			
 			// Map Tiles
 			tileSet.put(-1, TileSet.getSubImage(10 * 16, 0, 16, 16)); // Untapped Tile
@@ -49,6 +52,18 @@ public class TileImport {
 			frameSet.put(2, FrameSet.getSubImage(2 * 4, 0 * 4, 4, 4));
 			frameSet.put(3, FrameSet.getSubImage(3 * 4, 0 * 4, 4, 4));
 			frameSet.put(4, FrameSet.getSubImage(4 * 4, 0 * 4, 4, 4));
+			
+			//Buttons
+			buttonSet.put(1, ButtonSet.getSubImage(0 * 128, 0 * 64, 128, 64)); //Start Game
+			buttonSet.put(2, ButtonSet.getSubImage(1 * 128, 0 * 64, 128, 64)); //Main Menu
+			buttonSet.put(3, ButtonSet.getSubImage(2 * 128, 0 * 64, 128, 64)); //Options
+			buttonSet.put(4, ButtonSet.getSubImage(3 * 128, 0 * 64, 128, 64)); //Restart
+			buttonSet.put(5, ButtonSet.getSubImage(4 * 128, 0 * 64, 128, 64)); //Quit
+			buttonSet.put(6, ButtonSet.getSubImage(5 * 128, 0 * 64, 128, 64)); //Classic
+			buttonSet.put(7, ButtonSet.getSubImage(6 * 128, 0 * 64, 128, 64)); //Mystery
+			buttonSet.put(8, ButtonSet.getSubImage(7 * 128, 0 * 64, 128, 64)); //Time Attack
+			buttonSet.put(9, ButtonSet.getSubImage(8 * 128, 0 * 64, 128, 64)); //Arcade
+			
 			
 			System.out.println("Tiles Loaded into Memory.");
 		} catch (Exception e) {

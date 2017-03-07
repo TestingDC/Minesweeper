@@ -10,6 +10,7 @@ import org.lwjgl.opengl.PixelFormat;
 import Core.Game.GameMode;
 import Listen.KeyboardListener;
 import Listen.MouseListener;
+import Menu.MainMenu;
 import Tools.DebugMenu;
 import World.TileImport;
 
@@ -20,7 +21,6 @@ public class Minesweeper {
 	
 	public int DisplayWidth = 500, DisplayHeight = 500;
 	
-	public static Clock clock;
 	public static Game game;
 	
 	public static void main(String Args[]) {
@@ -34,17 +34,35 @@ public class Minesweeper {
 	}
 	
 	public void gameLoop() {
-		clock = new Clock();
-		clock.start();
-		
-		game = new Game(20, 20, 50, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
+		MainMenu menu = new MainMenu();
+		game = new Game(10, 10, 10, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
 		
 		while(!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			MouseListener.tick();
 			KeyboardListener.tick();
-			game.render();
+			glDisable(GL_TEXTURE_2D);
+			switch(gameState){
+			case MAINMENU:
+				menu.render();
+				menu.update();
+				break;
+			case GAME:
+				game.update();
+				game.render();
+			break;
+			case PAUSE_STATE:
+
+			break;
+			case GAMEMENU:
+
+			break;
+			case GAMEOPTIONS:
+
+			break;
+			}
+			glEnable(GL_TEXTURE_2D);
 	
 			if(DebugMenu.debug) {
 				DebugMenu.render();
@@ -53,11 +71,7 @@ public class Minesweeper {
 			Display.update();
 			Display.sync(60);
 		}
-		
-		Display.destroy();
-		clock.interrupt();
 	}
-	
 	// Creates window
 	public void createWindow() {
 		try {
