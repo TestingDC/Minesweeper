@@ -17,7 +17,7 @@ public class Game {
 	public Level level;
 	public static Button button;
 	
-	public static boolean gameOver = false;
+	public boolean gameOver = false;
 	
 	public enum GameMode { NORMAL, MYSTERY, ARCADE, TIMEATTACK}
 	public GameMode gameMode = GameMode.NORMAL;
@@ -41,15 +41,16 @@ public class Game {
 		// Calculate Board Offset.
 		boardOffsetX = (Display.getWidth()/2) - ((width * TileSize) / 2) - 2;
 		boardOffsetY = (Display.getHeight()/2) - ((height * TileSize) / 2);
-	}
-	
-	public void update() {
-		gameOver = level.getGameOver();
 		
 		int frameThickness = 8; // 8
 		int frameOffsetY = Game.boardOffsetY - frameThickness;
 		int frameWidth = (frameThickness * 2) + (level.level.length * TileSize);
+		
 		button = new Button((frameWidth/2)  + (Game.boardOffsetX - frameThickness), frameOffsetY - 12, 24, 24, TileImport.tileSet.get(95));
+	}
+	
+	public void update() {
+		gameOver = level.getGameOver();
 		
 		if(!gameOver) {
 			if(MouseListener.clicked) {
@@ -68,6 +69,10 @@ public class Game {
 				int tempY = (int) Math.floor(MouseListener.MouseY / TileSize);
 				level.markTile(tempX, tempY);
 			}
+		}
+		
+		if(level.checkWin()) {
+			System.out.println("GG");
 		}
 	}
 	

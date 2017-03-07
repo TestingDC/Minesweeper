@@ -111,20 +111,24 @@ public class Level {
 	public void updateBoard() {
 		// 94 93 92 91 90
 		// Re-pop tiles that are unchecked.
+		int[] power = { 94, 93, 92, 91, 90};
 		for(int x = 0; x < level.length; x++) {
 			for(int y = 0; y < level[0].length; y++) {
 				if(level[x][y].Checked == false && level[x][y].Marked == false && level[x][y].Question == false) {
 					level[x][y].Number = -1;
 				}
+				for(int p : power) {
+					if(level[x][y].Number == p) {
+						level[x][y].Number = getNearbyBombs(x, y);
+					}
+				}
 			}
 		}
-		
-		checkWin();
 	}
 	
 	public void randomQuestion(int x, int y) {
 		double rnInt = Math.random();
-		if(rnInt < 0.1) { // 1%
+		if(rnInt < 0.05) { // 1%
 			level[x][y].Number = 96;
 			level[x][y].Question = true;
 			level[x][y].Checked = false;
@@ -146,7 +150,9 @@ public class Level {
 				int xr = rand.nextInt((level.length - 1) + 1);
 				int yr = rand.nextInt((level[0].length - 1) + 1);
 				if(level[xr][yr].Bomb) {
-					markTile(xr, yr);
+					if(level[xr][yr].Marked == false) {
+						markTile(xr, yr);
+					}
 					level[xr][yr].Checked = true;
 				} else {
 					rescursiveCheck(xr, yr);
@@ -186,6 +192,7 @@ public class Level {
 						curY = level[0].length - 1;
 					}
 					level[curX][curY].Checked = false;
+					level[curX][curY].Marked = false;
 					updateBoard();
 					level[x][y].Number = 90;
 					level[x][y].Checked = true;

@@ -20,6 +20,7 @@ public class Minesweeper {
 	
 	public int DisplayWidth = 500, DisplayHeight = 500;
 	
+	public static Clock clock;
 	public static Game game;
 	
 	public static void main(String Args[]) {
@@ -33,14 +34,16 @@ public class Minesweeper {
 	}
 	
 	public void gameLoop() {
-		game = new Game(10, 10, 10, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
+		clock = new Clock();
+		clock.start();
+		
+		game = new Game(20, 20, 50, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
 		
 		while(!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			MouseListener.tick();
 			KeyboardListener.tick();
-			game.update();
 			game.render();
 	
 			if(DebugMenu.debug) {
@@ -50,6 +53,9 @@ public class Minesweeper {
 			Display.update();
 			Display.sync(60);
 		}
+		
+		Display.destroy();
+		clock.interrupt();
 	}
 	
 	// Creates window

@@ -22,7 +22,7 @@ public class Button {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		bounds.setBounds(this.x, this.y, this.width, this.height);
+		bounds.setBounds(this.x - (this.width/2), this.y - (this.height/2), this.width, this.height);
 	}
 	
 	public boolean wasClicked() {
