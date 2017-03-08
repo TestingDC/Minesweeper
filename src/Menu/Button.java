@@ -12,7 +12,7 @@ public class Button {
 	private Image image = null;
 	int x, y, width, height;
 	
-	Color clickedColor = new Color(255, 255, 255);
+	Color color = new Color(255, 255, 255);
 	Rectangle bounds = new Rectangle();
 	
 	public Button(int x, int y, int width, int height, Image image) {
@@ -29,13 +29,16 @@ public class Button {
 		int cx = Mouse.getX();
 		int cy = Math.abs(Mouse.getY() - Display.getHeight());
 		if(bounds.contains(cx, cy)) {
-			return true;
+			color = new Color(155, 155, 155);
+			 if	(Mouse.isButtonDown(0)) {
+				 return true;
+			 }
 		} else {
-			return false;
+			color = new Color(255,255,255);
 		}
+		return false;
 	}
-	
 	public void render() {
-		image.draw(this.x - (this.width/2), this.y - (this.height/2), this.width, this.height, clickedColor);
+		image.draw(this.x - (this.width/2), this.y - (this.height/2), this.width, this.height, color);
 	}
 }

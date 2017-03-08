@@ -3,6 +3,7 @@ package Core;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
@@ -10,14 +11,15 @@ import org.lwjgl.opengl.PixelFormat;
 import Core.Game.GameMode;
 import Listen.KeyboardListener;
 import Listen.MouseListener;
+import Menu.GameMenu;
 import Menu.MainMenu;
 import Tools.DebugMenu;
 import World.TileImport;
 
 public class Minesweeper {
 
-	public enum GameState { MAINMENU, GAMEMENU, GAMEOPTIONS, GAME, PAUSE_STATE }
-	public GameState gameState = GameState.MAINMENU;
+	public enum GameState { MAINMENU, GAMEMENU, OPTIONS, GAME, PAUSE}
+	public static GameState gameState = GameState.MAINMENU;
 	
 	public int DisplayWidth = 500, DisplayHeight = 500;
 	
@@ -35,32 +37,34 @@ public class Minesweeper {
 	
 	public void gameLoop() {
 		MainMenu menu = new MainMenu();
+		GameMenu gmenu = new GameMenu();
 		game = new Game(10, 10, 10, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
-		
 		while(!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
-
 			MouseListener.tick();
 			KeyboardListener.tick();
 			glDisable(GL_TEXTURE_2D);
+			
 			switch(gameState){
 			case MAINMENU:
 				menu.render();
 				menu.update();
 				break;
 			case GAME:
+				glEnable(GL_TEXTURE_2D);
 				game.update();
 				game.render();
-			break;
-			case PAUSE_STATE:
-
-			break;
+				glDisable(GL_TEXTURE_2D);
+				break;
+			case PAUSE:
+				break;
 			case GAMEMENU:
+				gmenu.render();
+				gmenu.update();
+				break;
+			case OPTIONS:
 
-			break;
-			case GAMEOPTIONS:
-
-			break;
+				break;
 			}
 			glEnable(GL_TEXTURE_2D);
 	

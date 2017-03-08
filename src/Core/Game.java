@@ -19,8 +19,8 @@ public class Game {
 	
 	public static boolean gameOver = false;
 	
-	public enum GameMode { NORMAL, MYSTERY, ARCADE, TIMEATTACK}
-	public GameMode gameMode = GameMode.NORMAL;
+	public enum GameMode { CLASSIC, ARCADE, TIMEATTACK}
+	public GameMode gameMode = GameMode.CLASSIC;
 	
 	public Game(int width, int height, int numberOfBombs, GameMode mode) {
 		this.width = width;

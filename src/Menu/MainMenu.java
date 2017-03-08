@@ -3,6 +3,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.opengl.Display;
 
+import Core.Minesweeper;
+import Core.Minesweeper.GameState;
 import World.TileImport;
 public class MainMenu{
 	
@@ -26,6 +28,7 @@ public void render(){
 }
 public void update(){
 	if(startGame.wasClicked()){
+		Minesweeper.gameState = GameState.GAMEMENU;
 		
 	}
 	if(Options.wasClicked()){
