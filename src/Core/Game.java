@@ -1,5 +1,14 @@
 package Core;
 
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glVertex2f;
+
 import org.lwjgl.opengl.Display;
 
 import Listen.MouseListener;
@@ -17,10 +26,10 @@ public class Game {
 	public Level level;
 	public static Button button;
 	
-	public static boolean gameOver = false;
+	public boolean gameOver = false;
 	
-	public enum GameMode { CLASSIC, ARCADE, TIMEATTACK}
-	public GameMode gameMode = GameMode.CLASSIC;
+	public enum GameMode { NORMAL, ARCADE, TIMEATTACK }
+	public GameMode gameMode = GameMode.NORMAL;
 	
 	public Game(int width, int height, int numberOfBombs, GameMode mode) {
 		this.width = width;
@@ -41,15 +50,16 @@ public class Game {
 		// Calculate Board Offset.
 		boardOffsetX = (Display.getWidth()/2) - ((width * TileSize) / 2) - 2;
 		boardOffsetY = (Display.getHeight()/2) - ((height * TileSize) / 2);
-	}
-	
-	public void update() {
-		gameOver = level.getGameOver();
 		
 		int frameThickness = 8; // 8
 		int frameOffsetY = Game.boardOffsetY - frameThickness;
 		int frameWidth = (frameThickness * 2) + (level.level.length * TileSize);
+		
 		button = new Button((frameWidth/2)  + (Game.boardOffsetX - frameThickness), frameOffsetY - 12, 24, 24, TileImport.tileSet.get(95));
+	}
+	
+	public void update() {
+		gameOver = level.getGameOver();
 		
 		if(!gameOver) {
 			if(MouseListener.clicked) {
@@ -69,9 +79,14 @@ public class Game {
 				level.markTile(tempX, tempY);
 			}
 		}
+		
+		if(level.checkWin()) {
+			
+		}
 	}
 	
 	public void render() {
+		renderBackground();
 		level.render();
 		renderFrame();
 		button.render();
@@ -96,7 +111,19 @@ public class Game {
 		TileImport.frameSet.get(4).draw(frameWidth+frameThickness+frameOffsetX, frameHeight+frameThickness+frameOffsetY, frameThickness, frameThickness);
 		
 		//Top Bar
-		
+		//Background
+	}
+	
+	public void renderBackground() {
+		glDisable(GL_TEXTURE_2D);
+		glColor3f(0.7f, 0.7f, 0.7f); //(rgb)
+		glBegin(GL_QUADS);
+		glVertex2f(0,0);
+		glVertex2f(Display.getWidth() ,0);
+		glVertex2f(Display.getWidth(),Display.getHeight());
+		glVertex2f(0,Display.getHeight());
+		glEnd();
+		glEnable(GL_TEXTURE_2D);
 	}
 	
 	public int getWidth() {

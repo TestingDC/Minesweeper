@@ -8,6 +8,7 @@ public class TileImport {
 	public static Image TileSet = null;
 	public static Image FrameSet = null;
 	public static Image ButtonSet = null;
+	public static Image cursor = null;
 	
 	public static HashMap<Integer, Image> tileSet = new HashMap<Integer, Image>();
 	public static HashMap<Integer, Image> frameSet = new HashMap<Integer, Image>();
@@ -18,6 +19,7 @@ public class TileImport {
 			TileSet = new Image("src/Resources/tileset.png");
 			FrameSet = new Image("src/Resources/outline.png");
 			ButtonSet = new Image("src/Resources/Button1.png");
+			cursor = new Image("src/Resources/cursor.png");
 			
 			// Map Tiles
 			tileSet.put(-1, TileSet.getSubImage(10 * 16, 0, 16, 16)); // Untapped Tile

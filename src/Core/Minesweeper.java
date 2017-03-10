@@ -8,7 +8,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
-import Core.Game.GameMode;
 import Listen.KeyboardListener;
 import Listen.MouseListener;
 import Menu.GameMenu;
@@ -32,18 +31,20 @@ public class Minesweeper {
 	public Minesweeper() {
 		createWindow();
 		TileImport.Import();
+		Mouse.setGrabbed(true);
 		gameLoop();
 	}
 	
 	public void gameLoop() {
 		MainMenu menu = new MainMenu();
 		GameMenu gmenu = new GameMenu();
-		game = new Game(10, 10, 10, GameMode.ARCADE); // (int) MapWidth, (int) MapHeight, (int) NumberOfBombs, (GameMode) gameMode
+		
 		while(!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
 			MouseListener.tick();
 			KeyboardListener.tick();
 			glDisable(GL_TEXTURE_2D);
+		
 			
 			switch(gameState){
 			case MAINMENU:
@@ -66,6 +67,7 @@ public class Minesweeper {
 
 				break;
 			}
+			TileImport.cursor.draw(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()), 8, 8);
 			glEnable(GL_TEXTURE_2D);
 	
 			if(DebugMenu.debug) {

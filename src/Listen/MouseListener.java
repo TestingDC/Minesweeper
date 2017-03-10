@@ -16,6 +16,8 @@ public class MouseListener {
 	public static void tick() {
 		MouseX = Mouse.getX() - Game.boardOffsetX;
 		MouseY = Math.abs(Mouse.getY() - Display.getHeight()) - Game.boardOffsetY;
+		
+		
 		while(Mouse.next()) {
 			if(Mouse.getEventButton() == 0) {
 				if(!Mouse.getEventButtonState()) {
@@ -36,5 +38,13 @@ public class MouseListener {
 				}
 			}
 		}
+	}
+	
+	public static void clear() {
+		leftButtonDown = false;
+		rightButtonDown = false;
+		clicked = false;
+		rightClicked = false;
+		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight());
 	}
 }

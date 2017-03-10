@@ -12,7 +12,7 @@ public class Level {
 	private static GameMode mode;
 	
 	public Level(int width, int height) {
-		setGameMode(GameMode.CLASSIC);
+		setGameMode(GameMode.NORMAL);
 		level = new Tile[width][height];
 		for(int x = 0; x < level.length; x++) {
 			for(int y = 0; y < level[0].length; y++) {
@@ -266,15 +266,17 @@ public class Level {
 	
 	public void generateGame(int numberOfBombs, GameMode mode) {
 		switch(mode) {
-		case CLASSIC:
+		case NORMAL:
 			generateBombs(numberOfBombs);
-			setGameMode(GameMode.CLASSIC);
+			setGameMode(GameMode.NORMAL);
 			break;
 		case ARCADE:
 			generateBombs(numberOfBombs);
 			setGameMode(GameMode.ARCADE);
 			break;
 		case TIMEATTACK:
+			generateBombs(numberOfBombs);
+			setGameMode(GameMode.TIMEATTACK);
 			break;
 		default:
 			break;
