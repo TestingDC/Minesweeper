@@ -45,7 +45,7 @@ public class GameMenu {
 			} catch (Exception e) {}
 		}
 		if(Arcade.wasClicked()){
-			Minesweeper.game = new Game(10, 10, 17, GameMode.ARCADE);
+			Minesweeper.game = new Game(20, 20, 50, GameMode.ARCADE);
 			Minesweeper.gameState = GameState.GAME;
 			try {
 				Thread.sleep(100);
