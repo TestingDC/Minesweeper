@@ -19,6 +19,9 @@ public class BlockQueue {
 	}
 }
 
+//* Never used but was a planned class *//
+
+
 class BlockKey {
 	int x = 0;
 	int y = 0;

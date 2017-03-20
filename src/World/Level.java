@@ -54,6 +54,17 @@ public class Level {
 		return false;
 	}
 	
+	public boolean checkLose() {
+		for(int x = 0; x < level.length; x++) {
+			for(int y = 0; y < level[0].length; y++) {
+				if(level[x][y].Number == 99) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public void clickBoard(int cx, int cy) {
 		if(cx >= level.length || cx < 0 || cy >= level[0].length || cy < 0) {
 			return;

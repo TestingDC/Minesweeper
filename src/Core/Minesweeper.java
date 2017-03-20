@@ -63,10 +63,8 @@ public class Minesweeper {
 				menu.update();
 				break;
 			case GAME:
-				glEnable(GL_TEXTURE_2D);
 				game.update();
 				game.render();
-				glDisable(GL_TEXTURE_2D);
 				break;
 			case PAUSE:
 				break;

@@ -13,6 +13,7 @@ import org.lwjgl.opengl.Display;
 
 import Listen.MouseListener;
 import Menu.Button;
+import Menu.EscapeMenu;
 import World.Level;
 import World.Tile;
 import World.TileImport;
@@ -25,6 +26,7 @@ public class Game {
 	public static int boardOffsetX = 8, boardOffsetY = 46; // 4 , 36
 	public Level level;
 	public static Button button;
+	public static EscapeMenu escapeMenu;
 	
 	public boolean gameOver = false;
 	
@@ -56,11 +58,10 @@ public class Game {
 		int frameWidth = (frameThickness * 2) + (level.level.length * TileSize);
 		
 		button = new Button((frameWidth/2)  + (Game.boardOffsetX - frameThickness), frameOffsetY - 12, 24, 24, TileImport.tileSet.get(95));
+		escapeMenu = new EscapeMenu();
 	}
 	
 	public void update() {
-		gameOver = level.getGameOver();
-		
 		if(!gameOver) {
 			if(MouseListener.clicked) {
 				MouseListener.clicked = false;
@@ -78,25 +79,47 @@ public class Game {
 				int tempY = (int) Math.floor(MouseListener.MouseY / TileSize);
 				level.markTile(tempX, tempY);
 			}
-		}
-		
-		if(level.checkWin()) {
 			
+			if(level.checkWin()) {
+				render();
+				Display.update();
+				escapeMenu.setWin(true);
+				gameOver = true;
+				try {
+					Thread.sleep(5000);
+				} catch (Exception e) {}
+			}
+			
+			if(level.checkLose()) {
+				render();
+				Display.update();
+				escapeMenu.setLose(true);
+				gameOver = true;
+				try {
+					Thread.sleep(5000);
+				} catch (Exception e) {}
+			}
+		} else {
+			escapeMenu.update();
 		}
-	}
+	} 
 	
 	public void render() {
-		renderBackground();
-		level.render();
-		renderFrame();
-		button.render();
+		if(!gameOver) {
+			renderBackground();
+			level.render();
+			renderFrame();
+			button.render();
+		} else {
+			escapeMenu.render();
+		}
 	}
 	
 	public void renderFrame() {
 		int frameOffsetX = Game.boardOffsetX - frameThickness;
 		int frameOffsetY = Game.boardOffsetY - frameThickness;
 		int frameWidth = frameThickness * ((level.level.length * TileSize) / frameThickness);
-		int frameHeight = frameThickness * ((level.level.length * TileSize) / frameThickness);
+		int frameHeight = frameThickness * ((level.level[0].length * TileSize) / frameThickness);
 		
 		// Draw Edges
 		TileImport.frameSet.get(0).draw(frameOffsetX, frameThickness + frameOffsetY, frameThickness, frameHeight);
