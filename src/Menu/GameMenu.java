@@ -30,11 +30,9 @@ public class GameMenu {
 		glVertex2f(Display.getWidth(),Display.getHeight());
 		glVertex2f(0,Display.getHeight());
 		glEnd();
-		glEnable(GL_TEXTURE_2D);
 		mainMenu.render();
 		Arcade.render();
 		Normal.render();
-		glDisable(GL_TEXTURE_2D);
 	}
 		
 	public void update(){
@@ -45,7 +43,7 @@ public class GameMenu {
 			} catch (Exception e) {}
 		}
 		if(Arcade.wasClicked()){
-			Minesweeper.game = new Game(20, 20, 50, GameMode.ARCADE);
+			Minesweeper.game = new Game(Minesweeper.optionsMenu.width, Minesweeper.optionsMenu.height, Minesweeper.optionsMenu.bombs, GameMode.ARCADE);
 			Minesweeper.gameState = GameState.GAME;
 			try {
 				Thread.sleep(100);
@@ -53,7 +51,7 @@ public class GameMenu {
 			MouseListener.clear();
 		}
 		if(Normal.wasClicked()) {
-			Minesweeper.game = new Game(10, 10, 17, GameMode.NORMAL);
+			Minesweeper.game = new Game(Minesweeper.optionsMenu.width, Minesweeper.optionsMenu.height, Minesweeper.optionsMenu.bombs, GameMode.NORMAL);
 			Minesweeper.gameState = GameState.GAME;
 			try {
 				Thread.sleep(100);

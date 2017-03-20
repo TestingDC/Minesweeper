@@ -26,11 +26,9 @@ public class MainMenu{
 		glVertex2f(Display.getWidth(), Display.getHeight());
 		glVertex2f(0, Display.getHeight());
 		glEnd();
-		glEnable(GL_TEXTURE_2D);
 		startGame.render();
 		Options.render();
 		Quit.render();
-		glDisable(GL_TEXTURE_2D);
 	}
 	
 	public void update(){
@@ -41,7 +39,10 @@ public class MainMenu{
 			} catch (Exception e) {}
 		}
 		if(Options.wasClicked()){
-			
+			Minesweeper.gameState = GameState.OPTIONS;
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {}
 		}
 		if(Quit.wasClicked()){
 			System.exit(0);

@@ -8,17 +8,20 @@ public class TileImport {
 	public static Image TileSet = null;
 	public static Image FrameSet = null;
 	public static Image ButtonSet = null;
+	public static Image OptionsSet = null;
 	public static Image cursor = null;
 	
 	public static HashMap<Integer, Image> tileSet = new HashMap<Integer, Image>();
 	public static HashMap<Integer, Image> frameSet = new HashMap<Integer, Image>();
 	public static HashMap<Integer, Image> buttonSet = new HashMap<Integer, Image>();
+	public static HashMap<Integer, Image> optionsSet = new HashMap<Integer, Image>();
 	
 	public static void Import() {
 		try {
 			TileSet = new Image("src/Resources/tileset.png");
 			FrameSet = new Image("src/Resources/outline.png");
-			ButtonSet = new Image("src/Resources/Button1.png");
+			ButtonSet = new Image("src/Resources/buttons.png");
+			OptionsSet = new Image("src/Resources/options.png");
 			cursor = new Image("src/Resources/cursor.png");
 			
 			// Map Tiles
@@ -65,6 +68,8 @@ public class TileImport {
 			buttonSet.put(7, ButtonSet.getSubImage(6 * 128, 0 * 64, 128, 64)); //Mystery
 			buttonSet.put(8, ButtonSet.getSubImage(7 * 128, 0 * 64, 128, 64)); //Time Attack
 			buttonSet.put(9, ButtonSet.getSubImage(8 * 128, 0 * 64, 128, 64)); //Arcade
+			optionsSet.put(0, OptionsSet.getSubImage(0 * 50, 0 * 50, 50, 50)); // Up Arrow
+			optionsSet.put(1, OptionsSet.getSubImage(1 * 50, 0 * 50, 50, 50)); // Down Arrow
 			
 			
 			System.out.println("Tiles Loaded into Memory.");

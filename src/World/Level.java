@@ -2,8 +2,10 @@ package World;
 
 import java.util.Random;
 
-import Core.Game;
+import org.lwjgl.opengl.Display;
+
 import Core.Minesweeper;
+import Core.Game;
 import Core.Game.GameMode;
 
 public class Level {
@@ -79,24 +81,24 @@ public class Level {
 		if(level[cx][cy].Question == true) {
 			clickedMystery(cx, cy);
 		}
-		rescursiveCheck(cx, cy);
+		recursiveCheck(cx, cy);
 	}
 	
-	public void rescursiveCheck(int x, int y) {
+	public void recursiveCheck(int x, int y) {
 		if((level[x][y].Number == -1) && (level[x][y].Checked == false)) {
 			if(getNearbyBombs(x, y) == 0) {
 				level[x][y].Number = 0;
 				level[x][y].Checked = true;
 			try {
-				rescursiveCheck(x - 1, y - 1);
-				rescursiveCheck(x, y - 1);
-				rescursiveCheck(x + 1, y - 1);
-				rescursiveCheck(x - 1, y);
-				rescursiveCheck(x, y);
-				rescursiveCheck(x + 1, y);
-				rescursiveCheck(x - 1, y + 1);
-				rescursiveCheck(x, y + 1);
-				rescursiveCheck(x + 1, y + 1);
+				recursiveCheck(x - 1, y - 1);
+				recursiveCheck(x, y - 1);
+				recursiveCheck(x + 1, y - 1);
+				recursiveCheck(x - 1, y);
+				recursiveCheck(x, y);
+				recursiveCheck(x + 1, y);
+				recursiveCheck(x - 1, y + 1);
+				recursiveCheck(x, y + 1);
+				recursiveCheck(x + 1, y + 1);
 				} catch(Exception e) {
 				
 				}
@@ -151,49 +153,63 @@ public class Level {
 			for(int i = 0; i < 8; i++) {
 				int xr = rand.nextInt((level.length - 1) + 1);
 				int yr = rand.nextInt((level[0].length - 1) + 1);
+				try {
+					Minesweeper.renderUpdate();
+					TileImport.tileSet.get(94).draw(xr * Game.TileSize + Game.boardOffsetX, yr * Game.TileSize + Game.boardOffsetY);
+					Display.update();
+					Thread.sleep(75);
+				} catch (Exception e) { }
+				
 				if(level[xr][yr].Bomb) {
 					if(level[xr][yr].Marked == false) {
 						markTile(xr, yr);
 					}
 					level[xr][yr].Checked = true;
 				} else {
-					rescursiveCheck(xr, yr);
+					recursiveCheck(xr, yr);
 				}
 			}
 			break;
 		case 1:
 			level[x][y].Number = 93; // Sonar // Flickers Bombs for 2 seconds
-			for(int i = 0; i < 8; i++) {
-				int xr = rand.nextInt((level.length - 1) + 1);
-				int yr = rand.nextInt((level[0].length - 1) + 1);
-				if(level[xr][yr].Bomb = true) {
-					TileImport.tileSet.get(99).draw(x * Game.TileSize + Game.boardOffsetX, y * Game.TileSize + Game.boardOffsetY, Game.TileSize, Game.TileSize);
-					try {
-						Thread.sleep(2000);
-					} catch (Exception e) {}
+			for(int i = 0; i < 3; i++) {
+				for(int xa = x - 3; xa < x + 3; xa++) {
+					for(int ya = y - 3; ya < y + 3; ya++) {
+						if(xa < 0 || xa > level.length - 1 || ya < 0 || ya > level[0].length - 1) {
+							// OutofBounds.
+						} else {
+							if(level[xa][ya].Bomb) {
+								Minesweeper.renderUpdate();
+								TileImport.tileSet.get(99).draw(xa * Game.TileSize + Game.boardOffsetX, ya * Game.TileSize + Game.boardOffsetY);
+								Display.update();
+								try {
+									Thread.sleep(225);
+								} catch(Exception e) { }
+							}
+						}
+					}
 				}
 			}
 			break;
 		case 2:
-			level[x][y].Number = 92; // Roulette // 
-			
+			level[x][y].Number = 92; // Roulette // ---
 			break;
 		case 3:
-			level[x][y].Number = 91; // BombSpread // Spreads 6 Bombs across entire board
-			for(int i = 0; i < 7; i++) {
-				int xr = rand.nextInt((level.length - 1) + 1);
-				int yr = rand.nextInt((level[0].length - 1) + 1);
-				if(level[xr][yr].Checked == false || level[xr][yr].Bomb == false) { //true = popped; down
-					level[xr][yr].Bomb = true;
-				}
-			}
+			level[x][y].Number = 91; // BombSpread // Spreads 3 Bombs nearby radius.
 			break;
 		case 4:
 			level[x][y].Number = 90; // Amnesia //
 			for(int i = 0; i < 5; i++) {
 				int curX = x;
 				int curY = y;
-				for(int s = 0; s < 50; s++) {
+				for(int s = 0; s < 30; s++) {
+					try {
+						Thread.sleep(20);
+						Minesweeper.renderUpdate();
+						Display.update();
+					} catch (Exception e) {
+						
+					}
 					if(Math.random() < 0.5) {
 						curX += (-1) + rand.nextInt((1 - (-1)) + 1);
 					} else {

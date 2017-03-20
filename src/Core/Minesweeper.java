@@ -12,6 +12,7 @@ import Listen.KeyboardListener;
 import Listen.MouseListener;
 import Menu.GameMenu;
 import Menu.MainMenu;
+import Menu.OptionsMenu;
 import Tools.DebugMenu;
 import World.TileImport;
 
@@ -23,6 +24,9 @@ public class Minesweeper {
 	public int DisplayWidth = 500, DisplayHeight = 500;
 	
 	public static Game game;
+	public static MainMenu menu;
+	public static GameMenu gameMenu;
+	public static OptionsMenu optionsMenu;
 	
 	public static void main(String Args[]) {
 		new Minesweeper();
@@ -32,21 +36,28 @@ public class Minesweeper {
 		createWindow();
 		TileImport.Import();
 		Mouse.setGrabbed(true);
+		menu = new MainMenu();
+		gameMenu = new GameMenu();
+		optionsMenu = new OptionsMenu();
 		gameLoop();
 	}
 	
 	public void gameLoop() {
-		MainMenu menu = new MainMenu();
-		GameMenu gmenu = new GameMenu();
-		
 		while(!Display.isCloseRequested()) {
-			glClear(GL_COLOR_BUFFER_BIT);
 			MouseListener.tick();
 			KeyboardListener.tick();
-			glDisable(GL_TEXTURE_2D);
-		
-			
-			switch(gameState){
+
+			renderUpdate();
+
+			Display.update();
+			Display.sync(60);
+		}
+	}
+	
+	public static void renderUpdate() {
+		glClear(GL_COLOR_BUFFER_BIT);
+		glDisable(GL_TEXTURE_2D);
+		switch(gameState){
 			case MAINMENU:
 				menu.render();
 				menu.update();
@@ -60,24 +71,22 @@ public class Minesweeper {
 			case PAUSE:
 				break;
 			case GAMEMENU:
-				gmenu.render();
-				gmenu.update();
+				gameMenu.render();
+				gameMenu.update();
 				break;
 			case OPTIONS:
-
+				optionsMenu.render();
+				optionsMenu.update();
 				break;
-			}
-			TileImport.cursor.draw(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()), 8, 8);
-			glEnable(GL_TEXTURE_2D);
-	
-			if(DebugMenu.debug) {
-				DebugMenu.render();
-			}
-			
-			Display.update();
-			Display.sync(60);
 		}
+		TileImport.cursor.draw(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()), 8, 8);
+		
+		if(DebugMenu.debug) {
+			DebugMenu.render();
+		}
+		glEnable(GL_TEXTURE_2D);
 	}
+	
 	// Creates window
 	public void createWindow() {
 		try {
