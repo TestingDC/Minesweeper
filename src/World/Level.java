@@ -96,11 +96,13 @@ public class Level {
 	}
 	
 	public void recursiveCheck(int x, int y) {
+		if(x > level.length - 1 || x < 0 || y > level[0].length - 1 || y < 0) {
+			return;
+		}
 		if((level[x][y].Number == -1) && (level[x][y].Checked == false)) {
 			if(getNearbyBombs(x, y) == 0) {
 				level[x][y].Number = 0;
 				level[x][y].Checked = true;
-			try {
 				recursiveCheck(x - 1, y - 1);
 				recursiveCheck(x, y - 1);
 				recursiveCheck(x + 1, y - 1);
@@ -110,9 +112,6 @@ public class Level {
 				recursiveCheck(x - 1, y + 1);
 				recursiveCheck(x, y + 1);
 				recursiveCheck(x + 1, y + 1);
-				} catch(Exception e) {
-				
-				}
 			} else {
 				level[x][y].Number = getNearbyBombs(x, y);
 				level[x][y].Checked = true;
@@ -183,7 +182,7 @@ public class Level {
 			break;
 		case 1:
 			level[x][y].Number = 93; // Sonar // Flickers Bombs for 2 seconds
-			for(int i = 0; i < 3; i++) {
+			for(int i = 0; i < 10; i++) {
 				for(int xa = x - 3; xa < x + 3; xa++) {
 					for(int ya = y - 3; ya < y + 3; ya++) {
 						if(xa < 0 || xa > level.length - 1 || ya < 0 || ya > level[0].length - 1) {
@@ -194,7 +193,7 @@ public class Level {
 								TileImport.tileSet.get(99).draw(xa * Game.TileSize + Game.boardOffsetX, ya * Game.TileSize + Game.boardOffsetY);
 								Display.update();
 								try {
-									Thread.sleep(225);
+									Thread.sleep(50);
 								} catch(Exception e) { }
 							}
 						}
@@ -349,6 +348,9 @@ public class Level {
 	}
 	
 	public void markTile(int x, int y) {
+		if(x > level.length - 1 || x < 0 || y > level[0].length - 1 || y < 0) {
+			return;
+		}
 		if(level[x][y].Number == -1 || level[x][y].Number == 97) {
 			if(level[x][y].Marked) {
 				level[x][y].Number = -1;

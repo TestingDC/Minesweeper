@@ -62,16 +62,16 @@ public class Game {
 	}
 	
 	public void update() {
+		if(button.wasClicked()) {
+			int temp = level.TotalBombs;
+			level = new Level(width,height);
+			level.generateGame(temp, gameMode);
+		}
+		
 		if(!gameOver) {
 			if(MouseListener.clicked) {
 				MouseListener.clicked = false;
 				level.clickBoard((int) Math.floor(MouseListener.MouseX / TileSize), (int) Math.floor(MouseListener.MouseY / TileSize));
-				
-				if(button.wasClicked()) {
-					int temp = level.TotalBombs;
-					level = new Level(width,height);
-					level.generateBombs(temp);
-				}
 			}
 			if(MouseListener.rightClicked) {
 				MouseListener.rightClicked = false;

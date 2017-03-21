@@ -18,11 +18,11 @@ public class TileImport {
 	
 	public static void Import() {
 		try {
-			TileSet = new Image("src/Resources/tileset.png");
-			FrameSet = new Image("src/Resources/outline.png");
-			ButtonSet = new Image("src/Resources/buttons.png");
-			OptionsSet = new Image("src/Resources/options.png");
-			cursor = new Image("src/Resources/cursor.png");
+			TileSet = new Image("Resources/tileset.png");
+			FrameSet = new Image("Resources/outline.png");
+			ButtonSet = new Image("Resources/buttons.png");
+			OptionsSet = new Image("Resources/options.png");
+			cursor = new Image("Resources/cursor.png");
 			
 			// Map Tiles
 			tileSet.put(-1, TileSet.getSubImage(10 * 16, 0, 16, 16)); // Untapped Tile
