@@ -203,6 +203,36 @@ public class Level {
 			break;
 		case 2:
 			level[x][y].Number = 92; // Roulette // ---
+			for(int i = 0; i < 2; i++) {
+				int xi = x;
+				int yi = y;
+				int dx = rand.nextInt((1 - (-1)));
+				int dy = rand.nextInt((1 - (-1))); 
+				for(int g = 0; g < 10; g++) {
+					if(xi < 2 || xi > level.length - 2) {
+						dx = -dx;
+					}
+					if(yi < 2 || yi > level[0].length - 2) {
+						dy = -dy;
+					}
+					xi+=dx;
+					yi+=dy;
+					if(level[xi][yi].Bomb) {
+						if(level[xi][yi].Marked == false) {
+							markTile(xi, yi);
+						}
+						level[xi][yi].Checked = true;
+					} else {
+						recursiveCheck(xi, yi);
+					}
+					Minesweeper.renderUpdate();
+					TileImport.tileSet.get(92).draw(xi * Game.TileSize + Game.boardOffsetX, yi * Game.TileSize + Game.boardOffsetY);
+					Display.update();
+					try {
+						Thread.sleep(50);
+					} catch(Exception e) { }
+				}
+			}
 			break;
 		case 3:
 			level[x][y].Number = 91; // BombSpread // Spreads 3 Bombs nearby radius.
